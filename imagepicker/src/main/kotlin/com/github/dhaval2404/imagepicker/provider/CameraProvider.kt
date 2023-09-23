@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityCompat.requestPermissions
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -33,17 +34,33 @@ class CameraProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
         /**
          * Permission Require for Image Capture using Camera
          */
-        private val REQUIRED_PERMISSIONS = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+        private val version = Build.VERSION.SDK_INT
+        private val REQUIRED_PERMISSIONS = if (version <= 32) {
+            arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
 
         /**
          * Permission Require for Image Capture using Camera
          */
-        private val REQUIRED_PERMISSIONS_EXTENDED = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        )
+        private val REQUIRED_PERMISSIONS_EXTENDED = if (version <= 32) {
+            arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
 
         private const val CAMERA_INTENT_REQ_CODE = 4281
         private const val PERMISSION_INTENT_REQ_CODE = 4282

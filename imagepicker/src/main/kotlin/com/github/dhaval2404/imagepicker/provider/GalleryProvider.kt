@@ -29,10 +29,20 @@ class GalleryProvider(activity: ImagePickerActivity) :
          * to crop or compress image write permission is also required. as both permission is in
          * same group, we have used write permission here.
          */
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
         private const val GALLERY_INTENT_REQ_CODE = 4261
         private const val PERMISSION_INTENT_REQ_CODE = 4262
+
+        private val version = Build.VERSION.SDK_INT
+        private val REQUIRED_PERMISSIONS = if (version <= 32) {
+            arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
     }
 
     // Mime types restrictions for gallery. By default all mime types are valid
